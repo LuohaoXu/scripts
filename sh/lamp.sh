@@ -3,10 +3,7 @@ systemctl start httpd
 rpm -ivh http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
 yum -y install mysql-community-server --nogpgcheck
 systemctl start mysqld
-grep 'password' /var/log/mysqld.log | cut -d ":" -f4  > ~/.bashsrc
-sed -i "s/ /export a='/g" .bashsrc
-sed -i "s/$/&'/g " .bashsrc
-source ~/.bashsrc
+a=$(grep -Eo 'A temporary password is generated for root@localhost: (.*)' /var/log/mysqld.log | sed "s/A temporary password is generated for root@localhost: //g")
 mysql -uroot -p$a
 set global validate_password_policy=0; 
 ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
