@@ -4,11 +4,7 @@ rpm -ivh http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
 yum -y install mysql-community-server --nogpgcheck
 systemctl start mysqld
 a=$(grep -Eo 'A temporary password is generated for root@localhost: (.*)' /var/log/mysqld.log | sed "s/A temporary password is generated for root@localhost: //g")
-mysql -uroot -p$a
-set global validate_password_policy=0; 
-ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '12345678';
-exit;
+mysql -uroot -p$a -e"set global validate_password_policy=0; ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '12345678';"
 mkdir -p /var/www/html/phpmyadmin
 wget https://labfileapp.oss-cn-hangzhou.aliyuncs.com/phpMyAdmin-4.0.10.20-all-languages.zip --no-check-certificate
 unzip phpMyAdmin-4.0.10.20-all-languages.zip
